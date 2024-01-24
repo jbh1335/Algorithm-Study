@@ -1,9 +1,6 @@
 import java.io.*;
-import java.util.*;
-
 public class Main {
     static int N;
-    static ArrayList<Integer> list = new ArrayList<>();
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine()); // N자리 수
@@ -12,16 +9,12 @@ public class Main {
         for(int i : leftNum) {
             makeNum(1, String.valueOf(i));
         }
-
-        for(int i : list) {
-            System.out.println(i);
-        }
     }
 
     // 조건에 맞는 N의 자리 소수 찾기
     public static void makeNum(int cnt, String num) {
         if(cnt == N) {
-            list.add(Integer.parseInt(num));
+            System.out.println(num);
             return;
         }
 
