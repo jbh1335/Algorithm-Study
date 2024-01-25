@@ -1,5 +1,5 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
     static int N, M, R;
@@ -39,12 +39,6 @@ public class Main {
     public static void rotate() {
         // 사각형(테두리)이 몇개 있는지
         int square = Math.min(N, M) / 2;
-        // 만약 N, M의 작은 값이 홀수라면 가운데 사각형은 한줄이 됨
-        boolean odd = false;
-        if(Math.min(N, M) % 2 == 1) {
-            odd = true;
-            square++;
-        }
         // 회전하면서 새로운 값을 저장할 배열
         newMap = new int[N][M];
 
@@ -58,11 +52,7 @@ public class Main {
 
                     if(nx >= 0 && ny >= 0 && nx < N && ny < M) {
                         // 자기 사각형 범위를 벗어나면 안됨
-                        if(newMap[nx][ny] != 0) {
-                            // 홀수는 마지막 사각형이 한줄이기 때문에 회전을 하지 않음 -> 시작하는 값에 마지막값을 넣어줘야함
-                            if(odd && i == square-1) newMap[i][i] = map[x][y];
-                            break;
-                        }
+                        if(newMap[nx][ny] != 0) break;
                         newMap[nx][ny] = map[x][y];
                         x = nx;
                         y = ny;
