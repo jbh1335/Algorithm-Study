@@ -14,21 +14,17 @@ public class Main {
 
         int M = Integer.parseInt(br.readLine());
         int[] findArr = new int[M];
-        int[] sortFindArr = new int[M];
 
         st = new StringTokenizer(br.readLine());
         for(int i = 0; i < M; i++) {
             findArr[i] = Integer.parseInt(st.nextToken());
-            sortFindArr[i] = findArr[i];
         }
 
         Arrays.sort(arr);
-        Arrays.sort(sortFindArr);
 
-        HashMap<Integer, Integer> map = new HashMap<>();
         for(int i = 0; i < M; i++) {
             int start = 0, end = N-1, mid = 0;
-            int target = sortFindArr[i];
+            int target = findArr[i];
             boolean exist = false;
 
             while(start <= end) {
@@ -44,12 +40,11 @@ public class Main {
                 }
             }
 
-            if(exist) map.put(sortFindArr[i], 1);
-            else map.put(sortFindArr[i], 0);
+            findArr[i] = exist ? 1 : 0;
         }
 
         for(int i : findArr) {
-            System.out.print(map.get(i) + " ");
+            System.out.print(i + " ");
         }
     }
 }
