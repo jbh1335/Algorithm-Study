@@ -1,32 +1,19 @@
-import java.util.*;
 class Solution {
     public int solution(int[] arr) {
-        int answer = 1;
-        Arrays.sort(arr);
-        int max = arr[arr.length-1];
+        int answer = arr[0];
         
-        for(int i = 2; i <= max; i++) {
-            int count = 0;
-            for(int j : arr) {
-                if(j % i == 0) {
-                    if(++count >= 2) break;
-                }
-            }
-            
-            if(count >= 2) {
-                max = 0;
-                for(int j = 0; j < arr.length; j++) {
-                    if(arr[j] % i == 0) arr[j] /= i;
-                    max = Math.max(max, arr[j]);
-                }
-                answer *= i;
-                i = 1;
-            }
-        }
-        
-        for(int i : arr) {
-            answer *= i;
+        for(int i = 1; i < arr.length; i++) {
+            answer = lcm(answer, arr[i]);
         }
         return answer;
+    }
+    
+    public static int gcd(int a, int b) {
+        if(b == 0) return a;
+        return gcd(b, a % b);
+    }
+    
+    public static int lcm(int a, int b) {
+        return (a * b) / gcd(a, b);
     }
 }
