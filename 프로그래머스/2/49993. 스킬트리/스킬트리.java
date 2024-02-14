@@ -14,7 +14,6 @@ class Solution {
                         break;
                     }
                 }
-
                 if(flag) answer++;
             }
         }
