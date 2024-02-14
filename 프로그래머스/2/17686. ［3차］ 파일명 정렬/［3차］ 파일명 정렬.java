@@ -7,23 +7,18 @@ class Solution {
         String[][] sArr = new String[files.length][3];
         for(int i = 0; i < files.length; i++) {
             String file = files[i];
+            // 숫자가 나오면 split해서 head부분 저장
+            String head = file.split("[0-9]")[0];
+            // head를 제외한 나머지 부분
+            String numberTail = file.substring(head.length(), file.length());
+            // 숫자가 아닌 문자가 나오면 자르고 number부분 저장
+            String number = numberTail.split("[^0-9]")[0];
+            // head와 number를 제외한 tail부분 저장
+            String tail = file.substring(head.length()+number.length(), file.length());
             
-            String number = "";
-            int idx = 0; // number가 끝나는 인덱스
-            for(int j = 0; j < file.length(); j++) {
-                char ch = file.charAt(j);
-                if(0+'0' <= ch && ch <= 9+'0') { // 숫자 찾기
-                    number += ch;
-                    idx = j;
-                } else {
-                    // 숫자를 다 찾았으면 끝내기
-                    if(!number.equals("")) break;
-                }
-            }
-            
-            sArr[i][0] = file.substring(0, idx-number.length()+1); // head
-            sArr[i][1] = number; // number
-            sArr[i][2] = file.substring(idx+1, file.length()); // tail
+            sArr[i][0] = head;
+            sArr[i][1] = number;
+            sArr[i][2] = tail;
         }
         
         Arrays.sort(sArr, (arr1, arr2) -> {
