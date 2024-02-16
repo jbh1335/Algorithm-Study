@@ -26,16 +26,11 @@ class Solution {
             }
             
             String binaryNum = Long.toBinaryString(numbers[i]);
-            String newBinaryNum = binaryNum.replace("0", "");
             StringBuilder sb = new StringBuilder();
             // 모두 1로 이루어진 홀수
-            if(binaryNum.length() == newBinaryNum.length()) {
+            if(!binaryNum.contains("0")) {
                 sb.append("10");
-                int count = binaryNum.length() - 1;
-                
-                while(count-- > 0) {
-                    sb.append("1");
-                }
+                sb.append(binaryNum.substring(1, binaryNum.length()));
             } else { // 0과 1이 섞인 홀수
                 int idx = binaryNum.lastIndexOf("0");
                 sb.append(binaryNum.substring(0, idx));
