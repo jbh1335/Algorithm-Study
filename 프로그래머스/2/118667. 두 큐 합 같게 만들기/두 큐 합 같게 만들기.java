@@ -1,29 +1,23 @@
 import java.util.*;
 class Solution {
     public int solution(int[] queue1, int[] queue2) {
-        int answer = -1;
+        int answer = 0;
         
         Queue<Integer> que1 = new LinkedList<>();
         Queue<Integer> que2 = new LinkedList<>();
         
-        long sum1 = 0;
+        long sum1 = 0, sum2 = 0;
         for(int i = 0; i < queue1.length; i++) {
             sum1 += queue1[i];
-            que1.offer(queue1[i]);
-        }
-        
-        long sum2 = 0;
-        for(int i = 0; i < queue2.length; i++) {
             sum2 += queue2[i];
+            que1.offer(queue1[i]);
             que2.offer(queue2[i]);
         }
         
         if((sum1 + sum2) % 2 != 0) return -1;
-        long target = (sum1 + sum2) / 2;
-        int count = 0;
         boolean flag = true;
         while(true) {
-            if(count >= (queue1.length+queue2.length)*2) {
+            if(answer >= (queue1.length+queue2.length)*2) {
                 flag = false;
                 break;
             }
@@ -41,10 +35,10 @@ class Solution {
                 sum1 += num;
                 sum2 -= num;
             }
-            count++;
+            answer++;
         }
         
-        if(flag) answer = count;
+        if(!flag) answer = -1;
         return answer;
     }
 }
