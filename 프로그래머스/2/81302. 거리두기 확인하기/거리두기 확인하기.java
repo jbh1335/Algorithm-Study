@@ -58,13 +58,15 @@ class Solution {
                 int nx = p.x + dx[d];
                 int ny = p.y + dy[d];
                 
-                if(nx >= 0 && ny >= 0 && nx < 5 && ny < 5 && !visited[nx][ny]) {
-                    if(map[nx][ny] == 'P') {
-                        if(p.dist+1 <= 2) return false;
-                    } else if(map[nx][ny] == 'O') {
-                        que.offer(new Point(nx, ny, p.dist+1));
+                if(nx >= 0 && ny >= 0 && nx < 5 && ny < 5) {
+                    if(!visited[nx][ny] && p.dist+1 <= 2) {
+                        if(map[nx][ny] == 'P') return false;
+                        
+                        if(map[nx][ny] == 'O') {
+                            que.offer(new Point(nx, ny, p.dist+1));
+                            visited[nx][ny] = true;
+                        }
                     }
-                    visited[nx][ny] = true;
                 }
             }
         }
