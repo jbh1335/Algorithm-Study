@@ -1,7 +1,7 @@
 import java.util.*;
 class Solution {
     public int solution(int n, int k, int[] enemy) {
-        int answer = -1;
+        int answer = 0;
         // 무적권이 적보다 크거나 같으면 다 사용 가능
         if(k >= enemy.length) return enemy.length;
         // 적을 내림차순 정렬로 저장
@@ -20,14 +20,10 @@ class Solution {
                     n += pque.poll();
                     k--;
                 } else {
-                    answer = i;
                     break;
                 }
             }
-        }
-        
-        if(answer == -1) {
-            answer = enemy.length;
+            answer++;
         }
         return answer;
     }
