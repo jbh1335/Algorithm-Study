@@ -17,11 +17,11 @@ class Solution {
                 }
                 
                 if(i-1 >= 0) dp[i][j] = dp[i-1][j] % 1000000007;
-                if(j-1 >= 0) dp[i][j] += dp[i][j-1] % 1000000007;
+                if(j-1 >= 0) dp[i][j] = (dp[i][j] + dp[i][j-1]) % 1000000007;
             }
         }
         
-        answer = dp[n-1][m-1] % 1000000007;
+        answer = dp[n-1][m-1];
         return answer;
     }
 }
