@@ -4,7 +4,6 @@ class Solution {
     static String[] answer;
     static boolean[] visited;
     public String[] solution(String[][] tickets) {
-        
         Arrays.sort(tickets, (arr1, arr2) -> {
             if(arr1[0].equals(arr2[0])) return arr1[1].compareTo(arr2[1]);
             return arr1[0].compareTo(arr2[0]);
@@ -13,7 +12,6 @@ class Solution {
         answer = new String[tickets.length+1];
         visited = new boolean[tickets.length];
         // 출발지점 찾기
-        int first = 0;
         for(int i = 0; i < tickets.length; i++) {
             if(tickets[i][0].equals("ICN")) {
                 answer[0] = tickets[i][0];
