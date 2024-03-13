@@ -14,8 +14,10 @@ class Solution {
                 for(int j = 1; j <= n; j++) {
                     if(arr[i][k] == 1 && arr[k][j] == 1) {
                         arr[i][j] = 1;
+                        arr[j][i] = -1;
                     } else if(arr[i][k] == -1 && arr[k][j] == -1) {
                         arr[i][j] = -1;
+                        arr[j][i] = 1;
                     }
                 }
             }
