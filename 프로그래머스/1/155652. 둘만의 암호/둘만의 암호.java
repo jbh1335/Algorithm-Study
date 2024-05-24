@@ -1,17 +1,17 @@
 class Solution {
     public String solution(String s, String skip, int index) {
-        StringBuilder sb = new StringBuilder();
+        String answer = "";
         
         for(int i = 0; i < s.length(); i++) {
             char ch = s.charAt(i);
-            int count = index;
             
-            while(count > 0) {
-                ch = ch == 'z' ? 'a' : ++ch;
-                if(skip.indexOf(ch) == -1) count--;
+            for(int j = 0; j < index; j++) {
+                if(++ch > 'z') ch = 'a';
+                if(skip.indexOf(ch) != -1) j--;
             }
-            sb.append(ch);
+            
+            answer += ch;
         }
-        return sb.toString();
+        return answer;
     }
 }
