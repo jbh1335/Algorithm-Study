@@ -92,7 +92,6 @@ public class Main {
                 if(treeList[i][j].size() == 0) continue;
                 // 나무가 죽으면 추가되는 양분
                 int nutrientNum = 0;
-                Collections.sort(treeList[i][j]);
 
                 // 하나의 칸에 여러 개의 나무가 있다면 나이가 어린 나무부터 양분을 먹음
                 for(int k = 0; k < treeList[i][j].size(); k++) {
@@ -130,7 +129,8 @@ public class Main {
                             int ny = j + dy[d];
 
                             if(nx >= 0 && ny >= 0 && nx < N && ny < N) {
-                                treeList[nx][ny].add(1);
+                                // 1살 나무는 가장 어리므로 0번째 인덱스에 추가
+                                treeList[nx][ny].add(0, 1);
                             }
                         }
                     }
