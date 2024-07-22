@@ -1,12 +1,12 @@
 class Solution {
     public int solution(int n) {
         int answer = 0;
+        int fact = 1, num = 0;
         
-        for(int i = 10; i >= 1; i--) {
-            if(fact(i) <= n) {
-                answer = i;
-                break;
-            }
+        while(true) {
+            fact *= ++num;
+            if(fact <= n) answer = num;
+            else break;
         }
         
         return answer;
