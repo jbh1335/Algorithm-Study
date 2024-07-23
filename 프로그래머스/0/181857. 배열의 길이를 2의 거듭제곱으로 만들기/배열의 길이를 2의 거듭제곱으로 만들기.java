@@ -1,15 +1,12 @@
+import java.util.*;
 class Solution {
     public int[] solution(int[] arr) {
-        int num = 1;
-        while(num < arr.length) {
-            num *= 2;
+        int length = 1;
+        while(length < arr.length) {
+            length *= 2;
         }
         
-        int[] answer = new int[num];
-        for(int i = 0; i < arr.length; i++) {
-            answer[i] = arr[i];
-        }
-        
+        int[] answer = Arrays.copyOf(arr, length);   
         return answer;
     }
 }
