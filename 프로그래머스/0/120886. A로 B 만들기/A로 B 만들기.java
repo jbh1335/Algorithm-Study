@@ -2,21 +2,17 @@ import java.util.*;
 class Solution {
     public int solution(String before, String after) {
         int answer = 1;
-        HashMap<Character, Integer> map = new HashMap<>();
+        char[] beforeArr = before.toCharArray();
+        char[] afterArr = after.toCharArray();
         
-        for(int i = 0; i < before.length(); i++) {
-            char ch = before.charAt(i);
-            map.put(ch, map.getOrDefault(ch, 0) + 1);
-        }
+        Arrays.sort(beforeArr);
+        Arrays.sort(afterArr);
         
-        for(int i = 0; i < after.length(); i++) {
-            char ch = after.charAt(i);
-            if(!map.containsKey(ch) || map.get(ch) == 0) {
+        for(int i = 0; i < afterArr.length; i++) {
+            if(beforeArr[i] != afterArr[i]) {
                 answer = 0;
                 break;
             }
-            
-            map.put(ch, map.get(ch)-1);
         }
         
         return answer;
