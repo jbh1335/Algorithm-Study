@@ -2,100 +2,95 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static int N, M, count, max;
-	static int[][] graph, newGraph;
-	static boolean[][] visited;
-	static int[][] num;
-	static int[] dx = {-1, 1, 0, 0};
-	static int[] dy = {0, 0, -1, 1};
-	static ArrayList<int[]> list = new ArrayList<>();
-	static Queue<int[]> que = new ArrayDeque<>();
-	
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		
-		graph = new int[N][M];
-		newGraph = new int[N][M];
-		num = new int[3][2];
-		visited = new boolean[N][M];
-		
-		for(int i = 0; i < N; i++) {
-			st = new StringTokenizer(br.readLine());
-			for(int j = 0; j < M; j++) {
-				graph[i][j] = Integer.parseInt(st.nextToken());
-				newGraph[i][j] = graph[i][j];
-				if(graph[i][j] == 0) {
-					list.add(new int[] {i, j});
-				}
-			}
-		}
-		
-		com(0, 0);
-		System.out.println(max);
-	}
-	
-	public static void bfs() {
-		while(!que.isEmpty()) {
-			int[] num = que.poll();
-			
-			for(int i = 0; i < 4; i++) {
-				int nx = num[0] + dx[i];
-				int ny = num[1] + dy[i];
-				
-				if(nx >= 0 && ny >= 0 && nx < N && ny < M) {
-					if(newGraph[nx][ny] == 0) {
-						que.add(new int[] {nx, ny});
-						newGraph[nx][ny] = 2;
-					}
-				}
-			}
-		}
-		
-		for(int i = 0; i < N; i++) {
-			for(int j = 0; j < M; j++) {
-				if(newGraph[i][j] == 0) {
-					count++;
-				}
-			}
-		}
-	}
-	
-	public static void com(int cnt, int start) {
-		if(cnt == 3) {
-			for(int i = 0; i < 3; i++) {
-				newGraph[num[i][0]][num[i][1]] = 1;
-			}
-			
-			for(int i = 0; i < N; i++) {
-				for(int j = 0; j < M; j++) {
-					if(newGraph[i][j] == 2) {
-						que.add(new int[] {i, j});
-					}
-				}
-			}
-			
-			bfs();
-			
-			max = Math.max(max, count);
-			makeNewGraph();
-			count = 0;
-			return;
-		}
-		
-		for(int i = start; i < list.size(); i++) {
-			num[cnt][0] = list.get(i)[0];
-			num[cnt][1] = list.get(i)[1];
-			com(cnt+1, i+1);
-		}
-	}
+    static int N, M, answer;
+    static int[][] map;
+    static boolean[][] visited;
+    static int[] dx = {-1, 1, 0, 0};
+    static int[] dy = {0, 0, -1, 1};
+    static ArrayList<Point> emptyList;
+    static class Point {
+        int x, y;
+        public Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-	public static void makeNewGraph() {
-		for(int i = 0; i < N; i++) {
-			newGraph[i] = graph[i].clone();
-		}
-	}
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        // 벽을 세울 수 있는 모든 빈칸 저장
+        emptyList = new ArrayList<>();
+        map = new int[N][M];
+
+        for(int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            for(int j = 0; j < M; j++) {
+                map[i][j] = Integer.parseInt(st.nextToken());
+                if(map[i][j] == 0) emptyList.add(new Point(i, j));
+            }
+        }
+
+        com(0, 0);
+        System.out.println(answer);
+    }
+
+    public static void com(int cnt, int start) {
+        if(cnt == 3) {
+            visited = new boolean[N][M];
+            for(int i = 0; i < N; i++) {
+                for(int j = 0; j < M; j++) {
+                    if(map[i][j] == 2 && !visited[i][j]) {
+                        virus(i, j);
+                    }
+                }
+            }
+
+            answer = Math.max(answer, countEmpty());
+            return;
+        }
+
+        for(int i = start; i < emptyList.size(); i++) {
+            Point p = emptyList.get(i);
+            map[p.x][p.y] = 1;
+            com(cnt+1, i+1);
+            map[p.x][p.y] = 0;
+        }
+    }
+
+    public static void virus(int x, int y) {
+        Queue<Point> que = new LinkedList<>();
+        que.offer(new Point(x, y));
+        visited[x][y] = true;
+
+        while(!que.isEmpty()) {
+            Point p = que.poll();
+
+            for(int d = 0; d < 4; d++) {
+                int nx = p.x + dx[d];
+                int ny = p.y + dy[d];
+
+                if(nx >= 0 && ny >= 0 && nx < N && ny < M) {
+                    if(!visited[nx][ny] && map[nx][ny] != 1) {
+                        que.offer(new Point(nx, ny));
+                        visited[nx][ny] = true;
+                    }
+                }
+            }
+        }
+    }
+
+    public static int countEmpty() {
+        int count = 0;
+        for(int i = 0; i < N; i++) {
+            for(int j = 0; j < M; j++) {
+                if(!visited[i][j] && map[i][j] == 0) count++;
+            }
+        }
+
+        return count;
+    }
 }
