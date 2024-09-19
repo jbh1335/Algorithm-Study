@@ -6,7 +6,7 @@ public class Main {
     static int[][] map;
     static int[] dx = {-1, 1, 0, 0};
     static int[] dy = {0, 0, -1, 1};
-    static Point[] virus;
+    static Point[] select;
     static ArrayList<Point> virusList;
     static class Point {
         int x, y;
@@ -24,7 +24,7 @@ public class Main {
 
         map = new int[N][N];
         virusList = new ArrayList<>(); // 바이러스를 놓을 수 있는 곳 저장
-        virus = new Point[M]; // 바이러스를 M개 놓은 위치
+        select = new Point[M]; // 바이러스를 M개 놓은 위치
 
         for(int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
@@ -42,29 +42,28 @@ public class Main {
 
     public static void com(int cnt, int start) {
         if(cnt == M) {
-            moveVirus();
+            virus();
             return;
         }
 
         for(int i = start; i < virusList.size(); i++) {
-            virus[cnt] = virusList.get(i);
+            select[cnt] = virusList.get(i);
             com(cnt+1, i+1);
         }
     }
 
-    public static void moveVirus() {
+    public static void virus() {
         Queue<Point> que = new LinkedList<>();
         boolean[][] visited = new boolean[N][N];
 
-        for(Point p : virus) {
+        for(Point p : select) {
             que.offer(new Point(p.x, p.y));
             visited[p.x][p.y] = true;
         }
 
-        int count = M, time = 0;
+        int count = M, time = -1;
         while(!que.isEmpty()) {
             int size = que.size();
-            boolean exist = false;
 
             for(int s = 0; s < size; s++) {
                 Point p = que.poll();
@@ -78,13 +77,12 @@ public class Main {
                             que.offer(new Point(nx, ny));
                             visited[nx][ny] = true;
                             count++;
-                            exist = true;
                         }
                     }
                 }
             }
 
-            if(exist) time++;
+            time++;
         }
 
         if(noWallCnt == count) answer = Math.min(answer, time);
