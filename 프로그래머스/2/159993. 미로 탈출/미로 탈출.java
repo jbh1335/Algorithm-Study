@@ -1,8 +1,7 @@
 import java.util.*;
 class Solution {
-    static int leverX, leverY;
+    static int N, M;
     static char[][] map;
-    static boolean[][] visited;
     static int[] dx = {-1, 1, 0, 0};
     static int[] dy = {0, 0, -1, 1};
     static class Point {
@@ -14,34 +13,43 @@ class Solution {
         }
     }
     public int solution(String[] maps) {
-        int answer = -1;
-        map = new char[maps.length][maps[0].length()];
+        N = maps.length;
+        M = maps[0].length();
+        map = new char[N][M];
         
-        int startX = 0, startY = 0;
-        for(int i = 0; i < maps.length; i++) {
-            String str = maps[i];
-            for(int j = 0; j < str.length(); j++) {
-                map[i][j] = str.charAt(j);
+        int startX = 0, startY = 0, leverX = 0, leverY = 0;
+        for(int i = 0; i < N; i++) {
+            for(int j = 0; j < M; j++) {
+                map[i][j] = maps[i].charAt(j);
+                // 시작 위치
                 if(map[i][j] == 'S') {
                     startX = i;
                     startY = j;
                 }
+                
+                // 레버 위치
+                if(map[i][j] == 'L') {
+                    leverX = i;
+                    leverY = j;
+                }
             }
         }
         
-        int goLever = bfs(startX, startY, 'L');
-        int goExit = 0;
-        if(goLever == -1) return -1;
-        else goExit = bfs(leverX, leverY, 'E');
+        // 레버 찾기
+        int answer = bfs(startX, startY, 'L');
+        // 레버를 찾았으면 출구 찾기
+        if(answer != -1) {
+            int exit = bfs(leverX, leverY, 'E');
+            answer = exit == -1 ? -1 : answer + exit;
+        }
         
-        if(goExit != -1) answer = goLever + goExit;
         return answer;
     }
     
     public static int bfs(int x, int y, char target) {
         Queue<Point> que = new LinkedList<>();
         que.offer(new Point(x, y, 0));
-        visited = new boolean[map.length][map[0].length];
+        boolean[][] visited = new boolean[N][M];
         visited[x][y] = true;
         
         while(!que.isEmpty()) {
@@ -51,18 +59,16 @@ class Solution {
                 int nx = p.x + dx[d];
                 int ny = p.y + dy[d];
                 
-                if(nx >= 0 && ny >= 0 && nx < map.length && ny < map[0].length && !visited[nx][ny]) {
-                    if(map[nx][ny] == target) {
-                        leverX = nx;
-                        leverY = ny;
-                        return p.dist+1;
-                    } else if(map[nx][ny] != 'X') {
+                if(nx >= 0 && ny >= 0 && nx < N && ny < M && !visited[nx][ny]) {
+                    if(map[nx][ny] == target) return p.dist + 1;
+                    if(map[nx][ny] != 'X') {
                         que.offer(new Point(nx, ny, p.dist+1));
                         visited[nx][ny] = true;
                     }
                 }
             }
         }
+        
         return -1;
     }
 }
