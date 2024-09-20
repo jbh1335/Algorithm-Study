@@ -13,22 +13,22 @@ public class Main {
         }
 
         Arrays.sort(arr);
-        int min = Integer.MAX_VALUE, answer1 = 0, answer2 = 0;
-        int start = 0, end = N-1;
+        int start = 0, end = N-1, sum = 0, min = Integer.MAX_VALUE;
+        int num1 = 0, num2 = 0;
+
         while(start < end) {
-            int sum = arr[start] + arr[end];
-            int abs = Math.abs(arr[start] + arr[end]);
-            
-            if(abs < min) {
-                min = abs;
-                answer1 = Math.min(arr[start], arr[end]);
-                answer2 = Math.max(arr[start], arr[end]);
+            sum = arr[start] + arr[end];
+
+            if(Math.abs(sum) < min) {
+                num1 = arr[start];
+                num2 = arr[end];
+                min = Math.abs(sum);
             }
 
-            if(sum == 0) break;
-            else if (sum > 0) end--;
+            if(sum >= 0) end--;
             else start++;
         }
-        System.out.println(answer1 + " " + answer2);
+
+        System.out.println(num1 + " " + num2);
     }
 }
