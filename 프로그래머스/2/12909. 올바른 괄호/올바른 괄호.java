@@ -6,9 +6,8 @@ class Solution {
         
         for(int i = 0; i < s.length(); i++) {
             char ch = s.charAt(i);
-            if(ch == '(') {
-                stack.push(ch);
-            } else {
+            if(ch == '(') stack.push(ch);
+            else {
                 if(stack.isEmpty()) {
                     answer = false;
                     break;
@@ -16,7 +15,7 @@ class Solution {
                 stack.pop();
             }
         }
-
+        
         if(!stack.isEmpty()) answer = false;
         return answer;
     }
