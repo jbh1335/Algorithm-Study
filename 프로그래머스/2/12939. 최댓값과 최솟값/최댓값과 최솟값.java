@@ -1,14 +1,17 @@
+import java.util.*;
 class Solution {
-    public String solution(String s) {   
+    public String solution(String s) {
+        String answer = "";
         String[] splitArr = s.split(" ");
+        int[] arr = new int[splitArr.length];
         
-        int max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
-        for(int i = 0; i < splitArr.length; i++) {
-            min = Math.min(min, Integer.parseInt(splitArr[i]));
-            max = Math.max(max, Integer.parseInt(splitArr[i]));
+        for(int i = 0; i < arr.length; i++) {
+            arr[i] = Integer.parseInt(splitArr[i]);
         }
         
-        String answer = min + " " + max;
+        Arrays.sort(arr);
+        answer = arr[0] + " " + arr[arr.length-1];
+        
         return answer;
     }
 }
