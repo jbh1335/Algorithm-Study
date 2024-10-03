@@ -6,32 +6,35 @@ class Solution {
         for(int i = 0; i < s.length(); i++) {
             String str = s.substring(i, s.length()) + s.substring(0, i);
             Stack<Character> stack = new Stack<>();
-            boolean flag = true;
+            boolean isAble = true;
             
             for(int j = 0; j < str.length(); j++) {
                 char ch = str.charAt(j);
-                if(ch == '(' || ch == '{' || ch == '[') {
+                if(ch == '[' || ch == '(' || ch == '{') {
                     stack.push(ch);
                 } else {
-                    if(stack.isEmpty()) {
-                        flag = false;
-                        break;
+                    if(!stack.isEmpty()) {
+                        char before = stack.peek();
+                        
+                        if(ch == ']') {
+                            if(before != '[') isAble = false;
+                        } else if(ch == ')') {
+                            if(before != '(') isAble = false;
+                        } else {
+                            if(before != '{') isAble = false;
+                        }
+                    } else {
+                        isAble = false;
                     }
                     
-                    if(stack.peek() == '(' && ch == ')') {
-                        stack.pop();
-                    } else if(stack.peek() == '{' && ch == '}') {
-                        stack.pop();
-                    } else if(stack.peek() == '[' && ch == ']') {
-                        stack.pop();
-                    } else {
-                        flag = false;
-                        break;
-                    }
+                    if(isAble) stack.pop();
+                    else break;
                 }
             }
-            if(flag && stack.isEmpty()) answer++;
+            
+            if(isAble && stack.isEmpty()) answer++;
         }
+        
         return answer;
     }
 }
