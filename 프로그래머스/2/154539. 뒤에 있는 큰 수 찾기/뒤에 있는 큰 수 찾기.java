@@ -1,27 +1,19 @@
 import java.util.*;
 class Solution {
-    public class Point {
-        int num, idx;
-        public Point(int num, int idx) {
-            this.num = num;
-            this.idx = idx;
-        }
-    }
     public int[] solution(int[] numbers) {
         int[] answer = new int[numbers.length];
-        PriorityQueue<Point> pque = new PriorityQueue<>((Point p1, Point p2) -> p1.num - p2.num);
+        Stack<Integer> stack = new Stack<>();
         
         for(int i = 0; i < numbers.length; i++) {
-            while(!pque.isEmpty()) {
-                if(pque.peek().num < numbers[i]) answer[pque.poll().idx] = numbers[i];
+            while(!stack.isEmpty()) {
+                if(numbers[stack.peek()] < numbers[i]) answer[stack.pop()] = numbers[i];
                 else break;
             }
-            
-            pque.offer(new Point(numbers[i], i));
+            stack.push(i);
         }
         
-        while(!pque.isEmpty()) {
-            answer[pque.poll().idx] = -1;
+        while(!stack.isEmpty()) {
+            answer[stack.pop()] = -1;
         }
         
         return answer;
