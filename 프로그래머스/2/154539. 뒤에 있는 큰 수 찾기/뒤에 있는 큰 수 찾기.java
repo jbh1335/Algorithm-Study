@@ -1,6 +1,6 @@
 import java.util.*;
 class Solution {
-    static class Point {
+    public class Point {
         int num, idx;
         public Point(int num, int idx) {
             this.num = num;
@@ -9,31 +9,21 @@ class Solution {
     }
     public int[] solution(int[] numbers) {
         int[] answer = new int[numbers.length];
+        PriorityQueue<Point> pque = new PriorityQueue<>((Point p1, Point p2) -> p1.num - p2.num);
         
-        Stack<Point> stack = new Stack<>();
         for(int i = 0; i < numbers.length; i++) {
-            if(stack.isEmpty()) {
-                stack.push(new Point(numbers[i], i));
-                continue;
+            while(!pque.isEmpty()) {
+                if(pque.peek().num < numbers[i]) answer[pque.poll().idx] = numbers[i];
+                else break;
             }
             
-            while(true) {
-                if(stack.isEmpty()) break;
-                
-                Point p = stack.peek();
-                if(p.num < numbers[i]) {
-                    answer[p.idx] = numbers[i];
-                    stack.pop();
-                } else {
-                    break;
-                }
-            }
-            stack.push(new Point(numbers[i], i));
+            pque.offer(new Point(numbers[i], i));
         }
         
-        while(!stack.isEmpty()) {
-            answer[stack.pop().idx] = -1;
+        while(!pque.isEmpty()) {
+            answer[pque.poll().idx] = -1;
         }
+        
         return answer;
     }
 }
