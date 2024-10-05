@@ -13,9 +13,7 @@ class Solution {
             return;
         }
         
-        if(!isFound && cnt == 5) {
-            return;
-        }
+        if(cnt == 5) return;
         
         for(int i = 0; i < 5; i++) {
             if(isFound) return;
