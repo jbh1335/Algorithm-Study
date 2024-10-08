@@ -2,30 +2,27 @@ class Solution
 {
     public int solution(int [][]board)
     {
-        int answer = 0;
-        int[][] dp = new int[board.length][board[0].length];
-
-        for(int i = 0; i < board.length; i++) {
-            for(int j = 0; j < board[i].length; j++) {
+        int answer = 1;
+        int[][] map = new int[board.length][board[0].length];
+        boolean flag = false;
+        
+        for(int i = 0; i < map.length; i++) {
+            for(int j = 0; j < map[0].length; j++) {
+                if(board[i][j] == 1) flag = true;
+                
                 if(i == 0 || j == 0) {
-                    dp[i][j] = board[i][j];
-                    answer = Math.max(answer, dp[i][j]);
+                    map[i][j] = board[i][j];
                     continue;
                 }
                 
-                // 1이면 정사각형 가능한지 확인
                 if(board[i][j] == 1) {
-                    int up = dp[i-1][j]; // 위
-                    int left = dp[i][j-1]; // 왼쪽
-                    int cross = dp[i-1][j-1]; // 왼쪽위 대각선
-                    
-                    // 3개의 값중 최솟값 +1
-                    dp[i][j] = Math.min(Math.min(up, left), cross) + 1;
-                    answer = Math.max(answer, dp[i][j]);
+                    map[i][j] = Math.min(map[i-1][j-1], Math.min(map[i][j-1], map[i-1][j])) + 1;
+                    answer = Math.max(answer, map[i][j]*map[i][j]);
                 }
             }
         }
 
-        return answer*answer;
+        if(!flag) answer = 0;
+        return answer;
     }
 }
