@@ -4,29 +4,28 @@ class Solution {
         int[] answer = new int[2];
         ArrayList<Integer> list = new ArrayList<>();
         
-        for(int i = 0; i < operations.length; i++) {
-            String[] splitArr = operations[i].split(" ");
+        for(String oper : operations) {
+            String[] splitArr = oper.split(" ");
             
             if(splitArr[0].equals("I")) {
                 list.add(Integer.parseInt(splitArr[1]));
+                Collections.sort(list);
             } else {
-                if(list.isEmpty()) continue;
+                if(list.size() == 0) continue;
+                
                 if(splitArr[1].equals("1")) {
                     list.remove(list.size()-1);
                 } else {
                     list.remove(0);
                 }
             }
-            Collections.sort(list);
         }
         
-        if(list.isEmpty()) {
-            answer[0] = 0;
-            answer[1] = 0;
-        } else {
+        if(list.size() > 0) {
             answer[0] = list.get(list.size()-1);
             answer[1] = list.get(0);
         }
+        
         return answer;
     }
 }
