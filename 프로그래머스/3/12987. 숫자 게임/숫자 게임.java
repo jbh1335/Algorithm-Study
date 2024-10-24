@@ -2,22 +2,23 @@ import java.util.*;
 class Solution {
     public int solution(int[] A, int[] B) {
         int answer = 0;
-        
         Arrays.sort(A);
-        Arrays.sort(B);
         
-        int start = 0;
-        for(int i = 0; i < A.length; i++) {
-            for(int j = start; j < B.length; j++) {
-                if(A[i] < B[j]) {
+        PriorityQueue<Integer> pque = new PriorityQueue<>();
+        for(int num : B) {
+            pque.offer(num);
+        }       
+        
+        for(int aNum : A) {
+            while(!pque.isEmpty()) {
+                int bNum = pque.poll();
+                if(bNum > aNum) {
                     answer++;
-                    start = j+1;
                     break;
                 }
             }
-            
-            if(start == B.length) break;
         }
+        
         return answer;
     }
 }
