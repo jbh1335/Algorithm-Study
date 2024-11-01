@@ -1,25 +1,23 @@
 class Solution {
     public int solution(int n, int[] stations, int w) {
-        int answer = 0;
-
-        int beforeStart = 1;
+        int answer = 0, start = 0, dist = 0, length = w * 2 + 1;
+        
         for(int i = 0; i < stations.length; i++) {
-            int start = stations[i] - w;
+            int end = stations[i] - w - 1;
             
-            if(beforeStart < start) {
-                int num = start - beforeStart;
-                answer += num / (2*w+1);
-                if(num % (2*w+1) != 0) answer++;
+            if(end > 0) {
+                dist = end - start + 1;
+                if(dist > 0) answer += dist % length == 0 ? dist / length : dist / length + 1;
             }
             
-            beforeStart = stations[i] + w + 1;
+            start = stations[i] + w + 1;
         }
         
-        if(beforeStart <= n) {
-            int num = n - beforeStart + 1;
-            answer += num / (2*w+1);
-            if(num % (2*w+1) != 0) answer++;
+        if(start <= n) {
+            dist = n - start + 1;
+            answer += dist % length == 0 ? dist / length : dist / length + 1;
         }
+        
         return answer;
     }
 }
