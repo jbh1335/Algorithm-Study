@@ -1,27 +1,38 @@
 class Solution {
     public int solution(int m, int n, int[][] puddles) {
-        int answer = 0;
-        int[][] dp = new int[n][m];
-        for(int i = 0; i < puddles.length; i++) {
-            int x = puddles[i][1] - 1;
-            int y = puddles[i][0] - 1;
-            dp[x][y] = -1;
-        }
+        int[][] map = new int[n][m];
         
-        dp[0][0] = 1;
         for(int i = 0; i < n; i++) {
             for(int j = 0; j < m; j++) {
-                if(dp[i][j] == -1) {
-                    dp[i][j] = 0;
-                    continue;
-                }
-                
-                if(i-1 >= 0) dp[i][j] = dp[i-1][j] % 1000000007;
-                if(j-1 >= 0) dp[i][j] = (dp[i][j] + dp[i][j-1]) % 1000000007;
+                if(i == 0 || j == 0) map[i][j] = 1;
+                else map[i][j] = -1;
             }
         }
         
-        answer = dp[n-1][m-1];
-        return answer;
+        for(int[] puddle : puddles) {
+            int x = puddle[1] - 1, y = puddle[0] - 1;
+            map[x][y] = 0;
+            
+            if(x == 0) {
+                for(int j = y+1; j < m; j++) {
+                    map[0][j] = 0;
+                }
+            }
+            
+            if(y == 0) {
+                for(int i = x+1; i < n; i++) {
+                    map[i][0] = 0;
+                }
+            }
+        }
+        
+        for(int i = 1; i < n; i++) {
+            for(int j = 1; j < m; j++) {
+                if(map[i][j] == 0) continue;
+                map[i][j] = (map[i-1][j] + map[i][j-1]) % 1000000007;
+            }
+        }
+        
+        return map[n-1][m-1];
     }
 }
