@@ -1,47 +1,61 @@
 import java.util.*;
 class Solution {
-    static boolean isFound;
     static String[] answer;
-    static boolean[] visited;
+    static class Point {
+        int cnt;
+        String city;
+        boolean[] visited;
+        String[] route;
+        public Point(String city, int cnt, boolean[] visited, String[] route) {
+            this.city = city;
+            this.cnt = cnt;
+            this.visited = visited;
+            this.route = route;
+        }
+    }
     public String[] solution(String[][] tickets) {
         Arrays.sort(tickets, (arr1, arr2) -> {
             if(arr1[0].equals(arr2[0])) return arr1[1].compareTo(arr2[1]);
             return arr1[0].compareTo(arr2[0]);
         });
         
-        answer = new String[tickets.length+1];
-        visited = new boolean[tickets.length];
-        // 출발지점 찾기
         for(int i = 0; i < tickets.length; i++) {
             if(tickets[i][0].equals("ICN")) {
-                answer[0] = tickets[i][0];
-                answer[1] = tickets[i][1];
-                visited[i] = true;
-                dfs(0, tickets[i][1], tickets);
-                visited[i] = false;
-                if(isFound) break;
+                if(bfs(i, tickets)) break;
             }
         }
         
         return answer;
     }
     
-    public static void dfs(int cnt, String start, String[][] tickets) {
-        if(isFound) return;
-        if(cnt == tickets.length-1) {
-            // 조건에 맞게 찾음
-            if(!answer[answer.length-1].equals("")) isFound = true;
-            return;
-        }
+    public static boolean bfs(int idx, String[][] tickets) {
+        Queue<Point> que = new LinkedList<>();
+        boolean[] visited = new boolean[tickets.length];
+        visited[idx] = true;
+        String[] route = new String[tickets.length+1];
+        route[0] = tickets[idx][0];
+        route[1] = tickets[idx][1];
+        que.offer(new Point(tickets[idx][1], 2, visited, route));
         
-        for(int i = 0; i < tickets.length; i++) {
-            if(isFound) return;
-            if(!visited[i] && start.equals(tickets[i][0])) {
-                answer[cnt+2] = tickets[i][1];
-                visited[i] = true;
-                dfs(cnt+1, tickets[i][1], tickets);
-                visited[i] = false;
+        while(!que.isEmpty()) {
+            Point p = que.poll();
+            if(p.cnt == route.length) {
+                answer = p.route;
+                return true;
+            }
+            
+            for(int i = 0; i < tickets.length; i++) {
+                if(!p.visited[i] && tickets[i][0].equals(p.city)) {
+                    boolean[] newVisited = p.visited.clone();
+                    newVisited[i] = true;
+                    String[] newRoute = p.route.clone();
+                    newRoute[p.cnt] = tickets[i][1];
+                    
+                    que.offer(new Point(tickets[i][1], p.cnt+1, newVisited, newRoute));
+                }
             }
         }
+        
+        return false;
     }
 }
