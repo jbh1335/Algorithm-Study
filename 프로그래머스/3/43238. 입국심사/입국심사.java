@@ -3,15 +3,14 @@ class Solution {
     public long solution(int n, int[] times) {
         long answer = 0;
         Arrays.sort(times);
-        
-        long start = 0, end = (long) n * times[times.length-1], mid = 0;
+        long start = 0, end = (long) times[times.length-1] * n, mid = 0;
         
         while(start <= end) {
             mid = (start + end) / 2;
-            
             long count = 0;
-            for(int i : times) {
-                count += mid / i;
+            
+            for(int time : times) {
+                count += mid / time;
             }
             
             if(count >= n) {
