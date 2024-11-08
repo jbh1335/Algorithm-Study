@@ -2,32 +2,26 @@ class Solution
 {
     public int solution(String s)
     {
-        int answer = 1;
-
-        for(int i = s.length(); i >= 2; i--) {
-            if(palindrome(i, s)) {
-                answer = i;
-                break;
+        int answer = 0;
+        
+        loop:
+        for(int l = s.length(); l >= 1; l--) {
+            for(int i = 0; i <= s.length()-l; i++) {
+                boolean isAble = true;
+                for(int j = 0; j < l/2; j++) {
+                    if(s.charAt(i+j) != s.charAt(i+l-1-j)) {
+                        isAble = false;
+                        break;
+                    }
+                }
+                
+                if(isAble) {
+                    answer = l;
+                    break loop;
+                }
             }
         }
 
         return answer;
-    }
-    
-    public static boolean palindrome(int size, String s) {
-        for(int i = 0; i <= s.length()-size; i++) {
-            int end = i + size;
-            int count = 1;
-            boolean isSame = true;
-            
-            for(int j = i; j < i+size/2; j++) {
-                if(s.charAt(j) != s.charAt(end-count++)) {
-                    isSame = false;
-                    break;
-                }
-            }
-            if(isSame) return true;
-        }
-        return false;
     }
 }
