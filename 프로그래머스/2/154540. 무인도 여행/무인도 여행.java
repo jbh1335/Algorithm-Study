@@ -1,16 +1,10 @@
 import java.util.*;
 class Solution {
-    /*
-        X: 바다, 숫자(1~9): 무인도
-        하나의 무인도에 적혀 있는 숫자들의 합: 최대 며칠동안 머물 수 있는지 (식량)
-        각 섬에서 최대 며칠씩 머물 수 있는지 배열에 오름차순으로 저장해서 리턴
-        무인도가 없으면 -1
-    */
+    static int N, M;
     static int[][] map;
     static boolean[][] visited;
     static int[] dx = {-1, 1, 0, 0};
     static int[] dy = {0, 0, -1, 1};
-    static ArrayList<Integer> list = new ArrayList<>();
     static class Point {
         int x, y;
         public Point(int x, int y) {
@@ -19,34 +13,39 @@ class Solution {
         }
     }
     public int[] solution(String[] maps) {
-        map = new int[maps.length][maps[0].length()];
-        visited = new boolean[maps.length][maps[0].length()];
+        ArrayList<Integer> list = new ArrayList<>();
+        N = maps.length;
+        M = maps[0].length();
+        map = new int[N][M];
+        visited = new boolean[N][M];
         
-        for(int i = 0; i < maps.length; i++) {
-            String str = maps[i];
-            for(int j = 0; j < str.length(); j++) {
-                if(str.charAt(j) == 'X') map[i][j] = 0;
-                else map[i][j] = str.charAt(j) - '0';
+        for(int i = 0; i < N; i++) {
+            for(int j = 0; j < M; j++) {
+                char ch = maps[i].charAt(j);
+                if(ch != 'X') map[i][j] = ch - '0';
             }
         }
         
-        for(int i = 0; i < map.length; i++) {
-            for(int j = 0; j < map[0].length; j++) {
-                if(!visited[i][j] && map[i][j] > 0) bfs(i, j);
+        for(int i = 0; i < N; i++) {
+            for(int j = 0; j < M; j++) {
+                if(!visited[i][j] && map[i][j] > 0) {
+                    list.add(bfs(i, j));
+                }
             }
         }
         
-        if(list.size() == 0) list.add(-1);
-        Collections.sort(list);
+        if(list.size() == 0) return new int[] {-1};
         
         int[] answer = new int[list.size()];
-        for(int i = 0; i < list.size(); i++) {
+        for(int i = 0; i < answer.length; i++) {
             answer[i] = list.get(i);
         }
+        
+        Arrays.sort(answer);
         return answer;
     }
     
-    public static void bfs(int x, int y) {
+    public static int bfs(int x, int y) {
         Queue<Point> que = new LinkedList<>();
         que.offer(new Point(x, y));
         visited[x][y] = true;
@@ -59,16 +58,16 @@ class Solution {
                 int nx = p.x + dx[d];
                 int ny = p.y + dy[d];
                 
-                if(nx >= 0 && ny >= 0 && nx < map.length && ny < map[0].length) {
+                if(nx >= 0 && ny >= 0 && nx < N && ny < M) {
                     if(!visited[nx][ny] && map[nx][ny] > 0) {
-                        que.offer(new Point(nx, ny));
                         visited[nx][ny] = true;
                         sum += map[nx][ny];
+                        que.offer(new Point(nx, ny));
                     }
                 }
             }
         }
         
-        if(sum > 0) list.add(sum);
+        return sum;
     }
 }
