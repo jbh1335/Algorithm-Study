@@ -1,7 +1,7 @@
 import java.util.*;
 class Solution {
     public String solution(String number, int k) {
-        String answer = "";
+        StringBuilder sb = new StringBuilder();
         int length = number.length() - k;
         Stack<Integer> stack = new Stack();
         stack.push(number.charAt(0) - '0');
@@ -21,9 +21,9 @@ class Solution {
         }
         
         for(int i = 0; i < length; i++) {
-            answer += stack.elementAt(i);
+            sb.append(stack.elementAt(i));
         }
         
-        return answer;
+        return sb.toString();
     }
 }
