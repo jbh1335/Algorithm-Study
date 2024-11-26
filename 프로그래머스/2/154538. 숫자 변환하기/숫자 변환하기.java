@@ -1,19 +1,41 @@
+import java.util.*;
 class Solution {
+    static class Point {
+        int num, cnt;
+        public Point(int num, int cnt) {
+            this.num = num;
+            this.cnt = cnt;
+        }
+    }
     public int solution(int x, int y, int n) {
-        int[] visited = new int[y+1];
-        if(x == y) return 0;
+        return bfs(x, y, n);
+    }
+    
+    public static int bfs(int x, int y, int n) {
+        Queue<Point> que = new LinkedList<>();
+        que.offer(new Point(x, 0));
+        boolean[] visited = new boolean[y+1];
         
-        for(int i = x; i < y; i++) {
-            if(i != x && visited[i] == 0) {
-                continue;
+        while(!que.isEmpty()) {
+            Point p = que.poll();
+            if(p.num == y) return p.cnt;
+            
+            if(p.num+n <= y && !visited[p.num+n]) {
+                que.offer(new Point(p.num+n, p.cnt+1));
+                visited[p.num+n] = true;
             }
             
-            if(i+n <= y) visited[i+n] = visited[i+n] == 0 ? visited[i] + 1 : Math.min(visited[i]+1, visited[i+n]);
-            if(i*2 <= y) visited[i*2] = visited[i*2] == 0 ? visited[i] + 1 : Math.min(visited[i]+1, visited[i*2]);
-            if(i*3 <= y) visited[i*3] = visited[i*3] == 0 ? visited[i] + 1 : Math.min(visited[i]+1, visited[i*3]);
+            if(p.num*2 <= y && !visited[p.num*2]) {
+                que.offer(new Point(p.num*2, p.cnt+1));
+                visited[p.num*2] = true;
+            }
+            
+            if(p.num*3 <= y && !visited[p.num*3]) {
+                que.offer(new Point(p.num*3, p.cnt+1));
+                visited[p.num*3] = true;
+            }
         }
         
-        int answer = visited[y] == 0 ? -1 : visited[y];
-        return answer;
+        return -1;
     }
 }
