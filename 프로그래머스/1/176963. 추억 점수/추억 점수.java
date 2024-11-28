@@ -10,11 +10,13 @@ class Solution {
         
         for(int i = 0; i < photo.length; i++) {
             int sum = 0;
-            for(int j = 0; j < photo[i].length; j++) {
-                sum += map.getOrDefault(photo[i][j], 0);
+            for(String str : photo[i]) {
+                sum += map.getOrDefault(str, 0);
             }
+            
             answer[i] = sum;
         }
+        
         return answer;
     }
 }
