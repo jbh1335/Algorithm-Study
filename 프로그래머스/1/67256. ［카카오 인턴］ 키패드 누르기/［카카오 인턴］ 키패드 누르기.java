@@ -1,56 +1,48 @@
 class Solution {
     public String solution(int[] numbers, String hand) {
         StringBuilder sb = new StringBuilder();
-        int leftX = 3, leftY = 0;
-        int rightX = 3, rightY = 2;
         int[][] keypad = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {-1, 0, -2}};
+        int left = -1, right = -2;
+        String who = "";
         
-        for(int i = 0; i < numbers.length; i++) {
-            String who = "";
-            int num = numbers[i];
-            int[] arr = findIndex(num, keypad);
-            
+        for(int num : numbers) {
             if(num == 1 || num == 4 || num == 7) {
-                who = "left";
+                who = "L";
             } else if(num == 3 || num == 6 || num == 9) {
-                who = "right";
+                who = "R";
             } else {
-                int leftDist = Math.abs(leftX - arr[0]) + Math.abs(leftY - arr[1]);
-                int rightDist = Math.abs(rightX - arr[0]) + Math.abs(rightY - arr[1]);
+                int[] targetIdx = findIdx(num, keypad);
+                int[] leftIdx = findIdx(left, keypad);
+                int[] rightIdx = findIdx(right, keypad);
                 
-                if(leftDist > rightDist) {
-                    who = "right";
+                int leftDist = Math.abs(leftIdx[0] - targetIdx[0]) + Math.abs(leftIdx[1] - targetIdx[1]);
+                int rightDist = Math.abs(rightIdx[0] - targetIdx[0]) + Math.abs(rightIdx[1] - targetIdx[1]);
+                
+                if(leftDist == rightDist) {
+                    if(hand.equals("left")) who = "L";
+                    else who = "R";
                 } else if(leftDist < rightDist) {
-                    who = "left";
+                    who = "L";
                 } else {
-                    who = hand.equals("left") ? "left" : "right";
+                    who = "R";
                 }
             }
             
-            if(who.equals("left")) {
-                leftX = arr[0];
-                leftY = arr[1];
-                sb.append("L");
-            } else {
-                rightX = arr[0];
-                rightY = arr[1];
-                sb.append("R");
-            }
+            sb.append(who);
+            if(who.equals("L")) left = num;
+            else right = num;
         }
+        
         return sb.toString();
     }
     
-    public static int[] findIndex(int num, int[][] keypad) {
-        int[] arr = new int[2];
-        for(int i = 0; i < keypad.length; i++) {
-            for(int j = 0; j < keypad[0].length; j++) {
-                if(keypad[i][j] == num) {
-                    arr[0] = i;
-                    arr[1] = j;
-                    return arr;
-                }
+    public static int[] findIdx(int num, int[][] keypad) {
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 3; j++) {
+                if(keypad[i][j] == num) return new int[] {i, j};
             }
         }
-        return arr;
+        
+        return new int[] {-1, -1};
     }
 }
