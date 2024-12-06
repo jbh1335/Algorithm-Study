@@ -6,11 +6,11 @@ class Solution {
             if(str.contains("ayaaya") || str.contains("yeye") || 
               str.contains("woowoo") || str.contains("mama")) continue;
             
-            String newStr = str.replace("aya", "1").replace("ye", "2")
-                                .replace("woo", "3").replace("ma", "4");
+            String newStr = str.replace("aya", " ").replace("ye", " ")
+                                .replace("woo", " ").replace("ma", " ");
             
-            newStr = newStr.replaceAll("[0-9]", "");
-            if(newStr.equals("")) answer++;
+            newStr = newStr.replace(" ", "");
+            if(newStr.length() == 0) answer++;
         }
         
         return answer;
