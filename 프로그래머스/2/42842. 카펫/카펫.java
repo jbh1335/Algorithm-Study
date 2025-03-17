@@ -1,25 +1,20 @@
 class Solution {
     public int[] solution(int brown, int yellow) {
         int[] answer = new int[2];
-        int total = brown + yellow;
-        int sqrt = (int) Math.sqrt(total);
+        int sqrt = (int) Math.sqrt(yellow);
         
         for(int i = 1; i <= sqrt; i++) {
-            if(total % i == 0) {
-                answer[0] = Math.max(i, (total)/i);
-                answer[1] = Math.min(i, (total)/i);
-                if(checkOk(answer[0], answer[1], brown, yellow)) break;
+            if(yellow % i == 0) {
+                int width = yellow / i, height = i;
+                
+                if(width * 2 + height * 2 + 4 == brown) {
+                    answer[0] = width + 2;
+                    answer[1] = height + 2;
+                    break;
+                }
             }
         }
         
         return answer;
-    }
-    
-    public static boolean checkOk(int width, int height, int brown, int yellow) {
-        int brownNum = 2 * (width+height) - 4;
-        int yellowNum = (width * height) - brownNum;
-        
-        if(brownNum == brown && yellowNum == yellow) return true;
-        return false;
     }
 }
