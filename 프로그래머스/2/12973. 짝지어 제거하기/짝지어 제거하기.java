@@ -8,7 +8,7 @@ class Solution
         
         for(int i = 0; i < s.length(); i++) {
             char ch = s.charAt(i);
-            if(stack.isEmpty()) {
+            if(stack.empty()) {
                 stack.push(ch);
                 continue;
             }
@@ -16,7 +16,7 @@ class Solution
             if(stack.peek() == ch) stack.pop();
             else stack.push(ch);
         }
-        
+
         if(stack.isEmpty()) answer = 1;
         return answer;
     }
