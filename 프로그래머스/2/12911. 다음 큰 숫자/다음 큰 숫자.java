@@ -1,20 +1,22 @@
 class Solution {
     public int solution(int n) {
-        int answer = 0;
-        int length = makeBinary(n);
+        int firstCnt = countOneNum(Integer.toBinaryString(n));
         
         while(true) {
-            if(makeBinary(++n) == length) {
-                answer = n;
-                break;
-            }
+            int cnt = countOneNum(Integer.toBinaryString(++n));
+            if(firstCnt == cnt) break;
         }
-        return answer;
+        
+        return n;
     }
     
-    public static int makeBinary(int num) {
-        String sNum = Integer.toBinaryString(num);
-        sNum = sNum.replace("0", "");
-        return sNum.length();
+    public static int countOneNum(String sNum) {
+        int count = 0;
+        
+        for(int i = 0; i < sNum.length(); i++) {
+            if(sNum.charAt(i) == '1') count++;
+        }
+        
+        return count;
     }
 }
