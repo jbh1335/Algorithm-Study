@@ -1,21 +1,15 @@
+import java.util.*;
 class Solution {
     public String solution(String s) {
         StringBuilder sb = new StringBuilder();
         s = s.toLowerCase();
+        String[] splitArr = s.split("\\s+");
+        String[] splitSpace = s.split("[^ ]+");
         
-        boolean isFirst = true;
-        for(int i = 0; i < s.length(); i++) {
-            char ch = s.charAt(i);
-            if(ch == ' ') {
-                sb.append(" ");
-                isFirst = true;
-            } else {
-                if(isFirst) {
-                    ch = String.valueOf(ch).toUpperCase().charAt(0);
-                    isFirst = false;
-                }
-                sb.append(ch);
-            }
+        for(int i = 0; i < splitArr.length; i++) {
+            String str = splitArr[i];
+            sb.append(String.valueOf(str.charAt(0)).toUpperCase()).append(str.substring(1, str.length()));
+            if(i+1 < splitSpace.length) sb.append(splitSpace[i+1]);
         }
         
         return sb.toString();
