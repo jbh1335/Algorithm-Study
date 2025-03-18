@@ -1,21 +1,22 @@
 import java.util.*;
 class Solution {
     public int solution(int[] elements) {
-        int answer = 0;
-        
         HashSet<Integer> set = new HashSet<>();
-        for(int i = 1; i <= elements.length; i++) {
-            for(int j = 0; j < elements.length; j++) {
+        
+        for(int s = 1; s <= elements.length; s++) {
+            for(int i = 0; i < elements.length; i++) {
                 int sum = 0;
-                for(int k = j; k < j+i; k++) {
-                    if(k >= elements.length) sum += elements[k-elements.length];
-                    else sum += elements[k];
+                
+                for(int j = i; j < i+s; j++) {
+                    int idx = j;
+                    if(idx >= elements.length) idx -= elements.length;
+                    sum += elements[idx];
                 }
+                
                 set.add(sum);
             }
         }
         
-        answer = set.size();
-        return answer;
+        return set.size();
     }
 }
