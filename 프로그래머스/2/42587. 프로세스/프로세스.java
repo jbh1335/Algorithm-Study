@@ -1,30 +1,25 @@
 import java.util.*;
 class Solution {
-    static class Point {
-        int prior, idx;
-        public Point(int prior, int idx) {
-            this.prior = prior;
-            this.idx = idx;
-        }
-    }
     public int solution(int[] priorities, int location) {
         int answer = 0;
+        PriorityQueue<Integer> pQue = new PriorityQueue<>((o1, o2) -> o2 - o1);
+        Queue<Integer> que = new LinkedList<>();
         
-        Queue<Point> que = new LinkedList<>();
         for(int i = 0; i < priorities.length; i++) {
-            que.offer(new Point(priorities[i], i));
+            pQue.offer(priorities[i]);
+            que.offer(i);
         }
         
-        Arrays.sort(priorities);
-        int priIdx = priorities.length-1;
         while(!que.isEmpty()) {
-            Point p = que.poll();
-            if(p.prior == priorities[priIdx]) {
+            int idx = que.poll();
+            
+            if(priorities[idx] == pQue.peek()) {
                 answer++;
-                priIdx--;
-                if(p.idx == location) break;
+                pQue.poll();
+                
+                if(idx == location) break;
             } else {
-                que.offer(p);
+                que.offer(idx);
             }
         }
         
