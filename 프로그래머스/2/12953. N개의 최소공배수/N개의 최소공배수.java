@@ -5,6 +5,7 @@ class Solution {
         for(int i = 1; i < arr.length; i++) {
             answer = lcm(answer, arr[i]);
         }
+        
         return answer;
     }
     
