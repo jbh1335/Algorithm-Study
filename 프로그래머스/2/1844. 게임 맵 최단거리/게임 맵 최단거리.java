@@ -1,5 +1,8 @@
 import java.util.*;
 class Solution {
+    static int N, M;
+    static int[] dx = {-1, 1, 0, 0};
+    static int[] dy = {0, 0, -1, 1};
     static class Point {
         int x, y, dist;
         public Point(int x, int y, int dist) {
@@ -9,16 +12,17 @@ class Solution {
         }
     }
     public int solution(int[][] maps) {
-        int answer = bfs(maps);
-        return answer;
+        N = maps.length;
+        M = maps[0].length;
+        
+        return bfs(maps);
     }
     
     public static int bfs(int[][] maps) {
         Queue<Point> que = new LinkedList<>();
         que.offer(new Point(0, 0, 1));
-        maps[0][0] = -1;
-        int[] dx = {-1, 1, 0, 0};
-        int[] dy = {0, 0, -1, 1};
+        boolean[][] visited = new boolean[N][M];
+        visited[0][0] = true;
         
         while(!que.isEmpty()) {
             Point p = que.poll();
@@ -27,11 +31,12 @@ class Solution {
                 int nx = p.x + dx[d];
                 int ny = p.y + dy[d];
                 
-                if(nx >= 0 && ny >= 0 && nx < maps.length && ny < maps[0].length) {
-                    if(nx == maps.length-1 && ny == maps[0].length-1) return p.dist + 1;
-                    if(maps[nx][ny] == 1) {
+                if(nx >= 0 && ny >= 0 && nx < N && ny < M) {
+                    if(nx == N-1 && ny == M-1) return p.dist + 1;
+                    
+                    if(!visited[nx][ny] && maps[nx][ny] == 1) {
                         que.offer(new Point(nx, ny, p.dist+1));
-                        maps[nx][ny] = -1;
+                        visited[nx][ny] = true;
                     }
                 }
             }
