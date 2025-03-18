@@ -4,33 +4,33 @@ class Solution {
     static boolean[] visited;
     public int solution(int k, int[][] dungeons) {
         select = new int[dungeons.length];
-        visited = new boolean[dungeons.length];
-        
-        per(0, dungeons, k);
+        visited = new boolean[select.length];
+        per(0, k, dungeons);
         return answer;
     }
     
-    public static void per(int cnt, int[][] dungeons, int k) {
+    public static void per(int cnt, int k, int[][] dungeons) {
         if(cnt == dungeons.length) {
-            int count = 0;
-            for(int i = 0; i < cnt; i++) {
-                if(k >= dungeons[select[i]][0]) {
-                    k -= dungeons[select[i]][1];
-                    count++;
-                } else {
-                    break;
-                }
-            }
-            answer = Math.max(answer, count);
+            answer = Math.max(answer, playDungeon(k, dungeons));
             return;
         }
         
-        for(int i = 0; i < dungeons.length; i++) {
+        for(int i = 0; i < select.length; i++) {
             if(visited[i]) continue;
+            
             select[cnt] = i;
             visited[i] = true;
-            per(cnt+1, dungeons, k);
+            per(cnt+1, k, dungeons);
             visited[i] = false;
         }
+    }
+    
+    public static int playDungeon(int k, int[][] dungeons) {
+        for(int i = 0; i < select.length; i++) {
+            if(k >= dungeons[select[i]][0]) k -= dungeons[select[i]][1];
+            else return i;
+        }
+        
+        return select.length;
     }
 }
