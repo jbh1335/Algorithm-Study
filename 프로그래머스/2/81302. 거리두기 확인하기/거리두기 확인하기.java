@@ -1,15 +1,7 @@
 import java.util.*;
 class Solution {
-    static char[][] map;
-    static int[] dx = {-1, 1, 0, 0};
-    static int[] dy = {0, 0, -1, 1};
     static class Point {
         int x, y, dist;
-        public Point(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-        
         public Point(int x, int y, int dist) {
             this.x = x;
             this.y = y;
@@ -17,39 +9,34 @@ class Solution {
         }
     }
     public int[] solution(String[][] places) {
-        int[] answer = new int[5];
-        map = new char[5][5];
+        int[] answer = {1, 1, 1, 1, 1};
         
         for(int i = 0; i < 5; i++) {
-            // 사람이 있는 곳의 좌표를 저장
-            ArrayList<Point> list = new ArrayList<>();
-            
+            loop:
             for(int j = 0; j < 5; j++) {
-                String str = places[i][j];
                 for(int k = 0; k < 5; k++) {
-                    map[j][k] = str.charAt(k);
-                    if(map[j][k] == 'P') list.add(new Point(j, k));        
+                    if(places[i][j].charAt(k) == 'P') {
+                        if(!bfs(j, k, places[i])) {
+                            answer[i] = 0;
+                            break loop;
+                        }
+                    }
                 }
             }
-            
-            boolean flag = true;
-            for(Point p : list) {
-                if(!checkOk(p.x, p.y)) {
-                    flag = false;
-                    break;
-                }
-            }
-            answer[i] = flag ? 1 : 0;
         }
         
         return answer;
     }
     
-    public static boolean checkOk(int x, int y) {
+    public static boolean bfs(int x, int y, String[] map) {
         Queue<Point> que = new LinkedList<>();
         que.offer(new Point(x, y, 0));
+        
         boolean[][] visited = new boolean[5][5];
         visited[x][y] = true;
+        
+        int[] dx = {-1, 1, 0, 0};
+        int[] dy = {0, 0, -1, 1};
         
         while(!que.isEmpty()) {
             Point p = que.poll();
@@ -58,14 +45,11 @@ class Solution {
                 int nx = p.x + dx[d];
                 int ny = p.y + dy[d];
                 
-                if(nx >= 0 && ny >= 0 && nx < 5 && ny < 5) {
-                    if(!visited[nx][ny] && p.dist+1 <= 2) {
-                        if(map[nx][ny] == 'P') return false;
-                        
-                        if(map[nx][ny] == 'O') {
-                            que.offer(new Point(nx, ny, p.dist+1));
-                            visited[nx][ny] = true;
-                        }
+                if(nx >= 0 && ny >= 0 && nx < 5 && ny < 5 && !visited[nx][ny]) {
+                    if(map[nx].charAt(ny) == 'P' && p.dist + 1 <= 2) return false;
+                    if(map[nx].charAt(ny) == 'O') {
+                        que.offer(new Point(nx, ny, p.dist+1));
+                        visited[nx][ny] = true;
                     }
                 }
             }
