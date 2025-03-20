@@ -8,10 +8,10 @@ class Solution {
             char dir = dirs.charAt(i);
             int nx = x, ny = y;
             
-            if(dir == 'U') ny = y + 1;
-            else if(dir == 'D') ny = y - 1;
-            else if(dir == 'L') nx = x - 1;
-            else nx = x + 1;
+            if(dir == 'U') ny++;
+            else if(dir == 'D') ny--;
+            else if(dir == 'L') nx--;
+            else nx++;
             
             if(nx >= -5 && ny >= -5 && nx <= 5 && ny <= 5) {
                 set.add("" + x + y + nx + ny);
