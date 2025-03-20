@@ -1,19 +1,17 @@
 class Solution {
     public String solution(int n, int t, int m, int p) {
-        String answer = "";
-        
+        String answer = "", str = "";
         int num = 0;
-        String strNum = "";
-        while(true) {
-            strNum += Integer.toString(num++, n).toUpperCase();
-            if(strNum.length() >= t*m) break;
+        
+        while(str.length() < t*m) {
+            str += Integer.toString(num++, n);
         }
         
-        int idx = p-1;
-        while(t-- > 0) {
-            answer += strNum.charAt(idx);
-            idx += m;
+        for(int i = p-1; i < str.length(); i+=m) {
+            if(t-- == 0) break;
+            answer += str.charAt(i);
         }
-        return answer;
+        
+        return answer.toUpperCase();
     }
 }
