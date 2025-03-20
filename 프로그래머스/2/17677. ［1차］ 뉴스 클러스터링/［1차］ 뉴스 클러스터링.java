@@ -2,55 +2,50 @@ import java.util.*;
 class Solution {
     public int solution(String str1, String str2) {
         int answer = 0;
-        str1 = str1.toLowerCase();
-        str2 = str2.toLowerCase();
+        HashMap<String, Integer> map1 = new HashMap<>();
+        HashMap<String, Integer> map2 = new HashMap<>();
+        HashSet<String> set = new HashSet<>();
         
-        ArrayList<String> list = new ArrayList<>();
-        for(int i = 0; i < str1.length(); i++) {
-            if(i == str1.length()-1) break;
-            char ch1 = str1.charAt(i);
-            char ch2 = str1.charAt(i+1);
+        str1 = str1.toLowerCase();
+        for(int i = 0; i < str1.length()-1; i++) {
+            String str = str1.substring(i, i+2);
             
-            if(checkAlpha(ch1)) {
-                if(checkAlpha(ch2)) {
-                    String s = "" + ch1 + ch2;
-                    list.add(s);
-                } else {
-                    i++;
-                }
+            if(str.replaceAll("[^a-z]", "").equals(str)) {
+                map1.put(str, map1.getOrDefault(str, 0) + 1);
             }
         }
+        
+        str2 = str2.toLowerCase();
+        for(int i = 0; i < str2.length()-1; i++) {
+            String str = str2.substring(i, i+2);
+            
+            if(str.replaceAll("[^a-z]", "").equals(str)) {
+                map2.put(str, map2.getOrDefault(str, 0) + 1);
+            }
+            
+            if(map1.containsKey(str)) set.add(str);
+        }
+        
+        if(map1.size() == 0 && map2.size() == 0) return 65536;
         
         int common = 0, total = 0;
-        for(int i = 0; i < str2.length(); i++) {
-            if(i == str2.length()-1) break;
-            char ch1 = str2.charAt(i);
-            char ch2 = str2.charAt(i+1);
+        for(String str : set) {
+            common += Math.min(map1.get(str), map2.get(str));
+            total += Math.max(map1.get(str), map2.get(str));
             
-            if(checkAlpha(ch1)) {
-                if(checkAlpha(ch2)) {
-                    String s = "" + ch1 + ch2;
-                    if(list.contains(s)) {
-                        common++;
-                        list.remove(s);
-                    } else {
-                        total++;
-                    }
-                } else {
-                    i++;
-                }
-            }
+            map1.remove(str);
+            map2.remove(str);
         }
         
-        total += common + list.size();
-        if(total == 0) return 65536;
+        for(String str : map1.keySet()) {
+            total += map1.get(str);
+        }
+        
+        for(String str : map2.keySet()) {
+            total += map2.get(str);
+        }
         
         answer = (int) ((double) common / total * 65536);
         return answer;
-    }
-    
-    public static boolean checkAlpha(char ch) {
-        if('a' <= ch && ch <= 'z') return true;
-        return false;
     }
 }
