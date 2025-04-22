@@ -6,9 +6,14 @@ class Solution {
         
         for(int i = 0; i < numbers.length; i++) {
             while(!stack.isEmpty()) {
-                if(numbers[stack.peek()] < numbers[i]) answer[stack.pop()] = numbers[i];
-                else break;
+                if(numbers[stack.peek()] < numbers[i]) {
+                    answer[stack.peek()] = numbers[i];
+                    stack.pop();
+                } else {
+                    break;
+                }
             }
+            
             stack.push(i);
         }
         
