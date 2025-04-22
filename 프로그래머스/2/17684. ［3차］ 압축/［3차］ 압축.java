@@ -1,34 +1,35 @@
 import java.util.*;
 class Solution {
     public int[] solution(String msg) {
+        ArrayList<Integer> list = new ArrayList<>();
         HashMap<String, Integer> map = new HashMap<>();
-        int num = 1;
-        for(char c = 'a'; c <= 'z'; c++) {
-            map.put(String.valueOf(c), num++);
+        
+        char ch = 'A';
+        for(int i = 1; i <= 26; i++) {
+            map.put(String.valueOf(ch++), i);
         }
         
-        msg = msg.toLowerCase();
-        ArrayList<Integer> list = new ArrayList<>();
-        int start = 0, end = 1;
-        String w = "";
-        while(end <= msg.length()) {
-            while(true) {
-                if(end > msg.length()) {
-                    list.add(map.get(w));
-                    break;
-                }
-                
-                String str = msg.substring(start, end);
-                if(map.containsKey(str)) {
-                    w = str;
-                    end++;
-                } else {
-                    list.add(map.get(w));
-                    map.put(str, num++);
-                    start = end-1;
-                    break;
-                }
+        int idx = 0, num = 27;
+        while(true) {
+            String str = String.valueOf(msg.charAt(idx++));
+            
+            while(map.containsKey(str) && idx < msg.length()) {
+                str += msg.charAt(idx++);
             }
+            
+            if(idx == msg.length()) {
+                if(str.length() == 1 || map.containsKey(str)) {
+                    list.add(map.get(str));
+                } else {
+                    list.add(map.get(str.substring(0, str.length()-1)));
+                    list.add(map.get(String.valueOf(msg.charAt(idx-1))));
+                }
+                break;
+            }
+            
+            list.add(map.get(str.substring(0, str.length()-1)));
+            map.put(str, num++);
+            idx--;
         }
         
         int[] answer = new int[list.size()];
