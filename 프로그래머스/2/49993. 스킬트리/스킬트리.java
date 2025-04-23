@@ -3,8 +3,8 @@ class Solution {
         int answer = 0;
         
         for(String str : skill_trees) {
-            String newStr = str.replaceAll("[^" + skill + "]", "");
-            if(newStr.equals(skill.substring(0, newStr.length()))) answer++;
+            str = str.replaceAll("[^" + skill + "]", "");
+            if(skill.startsWith(str)) answer++;
         }
         
         return answer;
