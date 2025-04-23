@@ -1,29 +1,21 @@
 import java.util.*;
 class Solution {
     public String solution(int[] numbers) {
-        String answer = "";
-        String[] strNum = new String[numbers.length];
-        int count = 0;
+        StringBuilder sb = new StringBuilder();
         
-        for(int i = 0; i < strNum.length; i++) {
-            if(numbers[i] == 0) count++;
-            strNum[i] = String.valueOf(numbers[i]);
+        String[] strNumArr = new String[numbers.length];
+        for(int i = 0; i < strNumArr.length; i++) {
+            strNumArr[i] = String.valueOf(numbers[i]);
         }
         
-        // 원소가 모두 0이면 0리턴
-        if(count == numbers.length) return "0";
+        Arrays.sort(strNumArr, (str1, str2) -> (str2+str1).compareTo(str1+str2));
         
-        Arrays.sort(strNum, (o1, o2) -> {
-            int num1 = Integer.parseInt(o1+o2);
-            int num2 = Integer.parseInt(o2+o1);
-            
-            return num2 - num1;
-        });
+        if(strNumArr[0].equals("0")) return "0";
         
-        for(String str : strNum) {
-            answer += str;
+        for(String str : strNumArr) {
+            sb.append(str);
         }
         
-        return answer;
+        return sb.toString();
     }
 }
