@@ -3,22 +3,21 @@ class Solution {
     public int solution(int[] order) {
         int answer = 0;
         Stack<Integer> stack = new Stack<>();
-        int num = 0, idx = 0;
-        while(idx < order.length) {
-            if(stack.isEmpty()) {
-                stack.push(++num);
-                continue;
+        
+        int num = 1;
+        for(int i = 0; i < order.length; i++) {
+            if(num <= order[i]) {
+                while(num <= order[i]) {
+                    stack.push(num++);
+                }
+            } else {
+                if(stack.peek() != order[i]) break;
             }
             
-            if(stack.peek() == order[idx]) {
-                answer++;
-                idx++;
-                stack.pop();
-            } else {
-                if(order[idx] < ++num) break;
-                stack.push(num);
-            }
+            stack.pop();
+            answer++;
         }
+        
         return answer;
     }
 }
