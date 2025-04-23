@@ -4,19 +4,20 @@ class Solution {
         int answer = 0;
         PriorityQueue<Integer> pque = new PriorityQueue<>();
         
-        for(int num : scoville) {
-            pque.offer(num);
+        for(int i : scoville) {
+            pque.offer(i);
         }
         
         while(pque.size() >= 2) {
-            if(pque.peek() >= K) break;
-            
-            int newNum = pque.poll() + pque.poll()*2;           
-            pque.offer(newNum);
+            if(pque.peek() < K) {
+                pque.offer(pque.poll() + (pque.poll() * 2));
+            } else {
+                break;
+            }
             answer++;
         }
         
-        if(answer == scoville.length-1 && pque.peek() < K) answer = -1;
+        if(pque.peek() < K) answer = -1;
         return answer;
     }
 }
