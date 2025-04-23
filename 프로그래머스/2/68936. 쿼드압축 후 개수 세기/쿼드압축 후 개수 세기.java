@@ -1,33 +1,49 @@
 class Solution {
-    static int zero, one;
+    static boolean[][] visited;
     public int[] solution(int[][] arr) {
-        divide(0, 0, arr.length, arr);
-        int[] answer = {zero, one};
+        int[] answer = new int[2];
+        int N = arr.length;
+        visited = new boolean[N][N];
+        
+        while(N >= 1) {
+            for(int i = 0; i < arr.length; i+=N) {
+                for(int j = 0; j < arr.length; j+=N) {
+                    if(visited[i][j]) continue;
+                    // 해당 영역이 같은 숫자이면 압축
+                    if(checkSame(i, j, N, arr)) {
+                        compress(i, j, N, arr);
+                        answer[arr[i][j]]++;
+                    }
+                }
+            }
+            
+            N /= 2;
+        }
+        
         return answer;
     }
     
-    public static void divide(int startX, int startY, int size, int[][] arr) {
-        boolean isOk = true;
-        int num = arr[startX][startY];
-        // 같은 수로 이루어졌는지 검사
-        loop:
-        for(int i = startX; i < startX+size; i++) {
-            for(int j = startY; j < startY+size; j++) {
-                if(arr[i][j] != num) {
-                    isOk = false;
-                    break loop;
+    public static void compress(int x, int y, int N, int[][] arr) {
+        for(int i = x; i < x+N; i++) {
+            for(int j = y; j < y+N; j++) {
+                visited[i][j] = true;
+            }
+        }
+    }
+    
+    public static boolean checkSame(int x, int y, int N, int[][] arr) {
+        boolean isAble = true;
+        int target = arr[x][y];
+        
+        for(int i = x; i < x+N; i++) {
+            for(int j = y; j < y+N; j++) {
+                if(arr[i][j] != target) {
+                    isAble = false;
+                    break;
                 }
             }
         }
         
-        if(isOk) { // 같은 수
-            if(num == 0) zero++;
-            else one++;
-        } else { // 아니면 4개로 분할
-            divide(startX, startY, size/2, arr);
-            divide(startX+size/2, startY, size/2, arr);
-            divide(startX, startY+size/2, size/2, arr);
-            divide(startX+size/2, startY+size/2, size/2, arr);
-        }
+        return isAble;
     }
 }
