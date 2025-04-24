@@ -5,22 +5,19 @@ class Solution {
         Queue<Integer> que1 = new LinkedList<>();
         Queue<Integer> que2 = new LinkedList<>();
         
-        long sum1 = 0;
-        for(int i : queue1) {
-            que1.offer(i);
-            sum1 += i;
-        }
-        
-        long sum2 = 0;
-        for(int i : queue2) {
-            que2.offer(i);
-            sum2 += i;
+        long sum1 = 0, sum2 = 0;
+        for(int i = 0; i < queue1.length; i++) {
+            que1.offer(queue1[i]);
+            que2.offer(queue2[i]);
+            
+            sum1 += queue1[i];
+            sum2 += queue2[i];
         }
         
         long goal = (sum1 + sum2) / 2;
         if((sum1 + sum2) % 2 != 0) return -1;
         
-        int maxCnt = que1.size() + que2.size()+ Math.max(que1.size(), que2.size());
+        int maxCnt = queue1.length * 3;
         while(sum1 != sum2) {
             if(++answer > maxCnt) {
                 answer = -1;
