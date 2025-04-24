@@ -2,19 +2,28 @@ import java.util.*;
 class Solution {
     public long solution(int[] weights) {
         long answer = 0;
+        int count = 0;
         Arrays.sort(weights);
         
         for(int i = 0; i < weights.length-1; i++) {
-            int target = weights[i];
-            for(int j = i+1; j < weights.length; j++) {
-                // 1:1 2:1 3:2 4:3
-                if(target == weights[j] || target*2 == weights[j] || 
-                   target*3 == weights[j]*2 || target*4 == weights[j]*3) {
-                    answer++;
-                }
-                
-                if(target*2 < weights[j]) break;
+            int a = weights[i];
+            
+            if(i != 0 && a == weights[i-1]) {
+                answer += --count;
+                continue;
             }
+            
+            count = 0;
+            for(int j = i+1; j < weights.length; j++) {
+                int b = weights[j];
+                
+                if(a*2 < b) break;
+                if(a == b || a*2 == b || a*3 == b*2 || a*4 == b*3) {
+                    count++;
+                }
+            }
+            
+            answer += count;
         }
         
         return answer;
