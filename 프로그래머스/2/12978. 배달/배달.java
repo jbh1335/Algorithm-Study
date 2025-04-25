@@ -1,57 +1,52 @@
 import java.util.*;
 class Solution {
-    static int[][] map;
-    static int[] visited;
+    static int[] distance;
+    static ArrayList<int[]>[] list;
     static class Point {
-        int town, dist;
-        public Point(int town, int dist) {
-            this.town = town;
+        int x, dist;
+        public Point(int x, int dist) {
+            this.x = x;
             this.dist = dist;
         }
     }
     public int solution(int N, int[][] road, int K) {
         int answer = 0;
-        map = new int[N+1][N+1];
-        visited = new int[N+1];
+        distance = new int[N+1];
+        Arrays.fill(distance, K+1);
         
-        for(int i = 0; i <= N; i++) {
-            Arrays.fill(map[i], 10001);
-        }
-        
-        Arrays.fill(visited, 500001);
-        
-        for(int i = 0; i < road.length; i++) {
-            int a = road[i][0];
-            int b = road[i][1];
-            int c = road[i][2];
-            
-            map[a][b] = map[b][a] = Math.min(map[a][b], c);
-        }
-
-        bfs(N, K);
+        list = new ArrayList[N+1];
         for(int i = 1; i <= N; i++) {
-            if(visited[i] != 500001) answer++;
+            list[i] = new ArrayList<>();
         }
+        
+        for(int[] arr : road) {
+            list[arr[0]].add(new int[] {arr[1], arr[2]});
+            list[arr[1]].add(new int[] {arr[0], arr[2]});
+        }
+        
+        bfs(K);
+        
+        for(int i = 1; i <= N; i++) {
+            if(distance[i] <= K) answer++;
+        }
+        
         return answer;
     }
     
-    public static void bfs(int N, int K) {
+    public static void bfs(int K) {
         Queue<Point> que = new LinkedList<>();
         que.offer(new Point(1, 0));
-        visited[1] = 0;
+        distance[1] = 0;
         
         while(!que.isEmpty()) {
             Point p = que.poll();
             
-            for(int i = 1; i <= N; i++) {
-                if(p.town == i) continue;
-                
-                if(map[p.town][i] != 10001) {
-                    int dist = map[p.town][i] + p.dist;
-                    if(dist <= K && dist < visited[i]) {
-                        que.offer(new Point(i, dist));
-                        visited[i] = dist;
-                    }
+            for(int[] arr : list[p.x]) {
+                int dist = p.dist + arr[1];
+                if(dist > K) continue;
+                if(dist < distance[arr[0]]) {
+                    distance[arr[0]] = dist;
+                    que.offer(new Point(arr[0], dist));
                 }
             }
         }
