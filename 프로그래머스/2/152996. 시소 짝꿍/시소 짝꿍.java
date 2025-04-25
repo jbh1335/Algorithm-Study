@@ -2,28 +2,21 @@ import java.util.*;
 class Solution {
     public long solution(int[] weights) {
         long answer = 0;
-        int count = 0;
+        HashMap<Double, Integer> map = new HashMap<>();
         Arrays.sort(weights);
         
-        for(int i = 0; i < weights.length-1; i++) {
-            int a = weights[i];
+        for(int i : weights) {
+            double a = i * 1.0;
+            double b = (i * 1.0) / 2.0;
+            double c = (i * 2.0) / 3.0;
+            double d = (i * 3.0) / 4.0;
             
-            if(i != 0 && a == weights[i-1]) {
-                answer += --count;
-                continue;
-            }
+            if(map.containsKey(a)) answer += map.get(a);
+            if(map.containsKey(b)) answer += map.get(b);
+            if(map.containsKey(c)) answer += map.get(c);
+            if(map.containsKey(d)) answer += map.get(d);
             
-            count = 0;
-            for(int j = i+1; j < weights.length; j++) {
-                int b = weights[j];
-                
-                if(a*2 < b) break;
-                if(a == b || a*2 == b || a*3 == b*2 || a*4 == b*3) {
-                    count++;
-                }
-            }
-            
-            answer += count;
+            map.put(a, map.getOrDefault(a, 0) + 1);
         }
         
         return answer;
