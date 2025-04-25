@@ -2,15 +2,14 @@ import java.util.*;
 class Solution {
     static int N, M;
     static class Point {
-        int x, y, dist;
-        public Point(int x, int y, int dist) {
+        int x, y, cnt;
+        public Point(int x, int y, int cnt) {
             this.x = x;
             this.y = y;
-            this.dist = dist;
+            this.cnt = cnt;
         }
     }
     public int solution(String[] maps) {
-        int answer = -1;
         N = maps.length;
         M = maps[0].length();
         
@@ -20,25 +19,23 @@ class Solution {
                 if(maps[i].charAt(j) == 'S') {
                     startX = i;
                     startY = j;
-                }
-                
-                if(maps[i].charAt(j) == 'L') {
+                } else if(maps[i].charAt(j) == 'L') {
                     leverX = i;
                     leverY = j;
                 }
             }
         }
         
-        // 레버 찾으러 가는 거리
-        int leverDist = bfs(startX, startY, 'L', maps);
-        
-        // 출구 가는 거리
-        if(leverDist != -1) {
-            int exitDist = bfs(leverX, leverY, 'E', maps);
-            if(exitDist != -1) answer = leverDist + exitDist;
+        int leverCnt = bfs(startX, startY, 'L', maps);
+        int exitCnt = 0;
+        if(leverCnt == -1) {
+            return -1;
+        } else {
+            exitCnt = bfs(leverX, leverY, 'E', maps);
+            if(exitCnt == -1) return -1;
         }
         
-        return answer;
+        return leverCnt + exitCnt;
     }
     
     public static int bfs(int x, int y, char target, String[] maps) {
@@ -58,11 +55,10 @@ class Solution {
                 int nx = p.x + dx[d];
                 int ny = p.y + dy[d];
                 
-                if(nx >= 0 && ny >= 0 && nx < N && ny < M) {
-                    if(maps[nx].charAt(ny) == target) return p.dist + 1;
-                    
-                    if(!visited[nx][ny] && maps[nx].charAt(ny) != 'X') {
-                        que.offer(new Point(nx, ny, p.dist+1));
+                if(nx >= 0 && ny >= 0 && nx < N && ny < M && !visited[nx][ny]) {
+                    if(maps[nx].charAt(ny) == target) return p.cnt + 1;
+                    if(maps[nx].charAt(ny) != 'X') {
+                        que.offer(new Point(nx, ny, p.cnt+1));
                         visited[nx][ny] = true;
                     }
                 }
