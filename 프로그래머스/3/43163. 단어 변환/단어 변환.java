@@ -3,34 +3,29 @@ class Solution {
     static class Point {
         String word;
         int cnt;
-        boolean[] visited;
         
-        public Point(String word, int cnt, boolean[] visited) {
-            this.cnt = cnt;
-            this.visited = visited;
+        public Point(String word, int cnt) {
             this.word = word;
+            this.cnt = cnt;
         }
     }
     public int solution(String begin, String target, String[] words) {
-        int answer = bfs(begin, target, words);
-        return answer;
+        return bfs(begin, target, words);
     }
     
     public static int bfs(String begin, String target, String[] words) {
         Queue<Point> que = new LinkedList<>();
-        que.offer(new Point(begin, 0, new boolean[words.length]));
+        boolean[] visited = new boolean[words.length];
+        que.offer(new Point(begin, 0));
         
         while(!que.isEmpty()) {
             Point p = que.poll();
             
             for(int i = 0; i < words.length; i++) {
-                if(!p.visited[i] && checkOneDifferent(p.word, words[i])) {
+                if(!visited[i] && checkOneDifferent(p.word, words[i])) {
                     if(words[i].equals(target)) return p.cnt + 1;
-                    
-                    boolean[] visited = new boolean[words.length];
-                    visited = p.visited.clone();
+                    que.offer(new Point(words[i], p.cnt+1));
                     visited[i] = true;
-                    que.offer(new Point(words[i], p.cnt+1, visited));
                 }
             }
         }
